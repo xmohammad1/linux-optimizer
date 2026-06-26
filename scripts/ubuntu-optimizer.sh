@@ -517,8 +517,8 @@ vm.overcommit_memory = 2
 
 # Sets overcommit to 100% of RAM when enabled, but ignored here since overcommit_memory = 2 disables it.
 vm.overcommit_ratio = 100
-
-
+net.ipv4.ip_local_port_range = 1024 65535
+net.ipv4.tcp_tw_reuse = 1
 ################################################################
 ################################################################
 
