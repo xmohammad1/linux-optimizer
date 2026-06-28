@@ -423,7 +423,7 @@ net.ipv4.tcp_mtu_probing = 1
 net.ipv4.tcp_notsent_lowat = 32768
 
 # Specify retries for TCP socket to establish connection
-net.ipv4.tcp_retries2 = 8
+net.ipv4.tcp_retries2 = 10
 
 # Enable TCP SACK and DSACK
 net.ipv4.tcp_sack = 1
@@ -513,7 +513,7 @@ kernel.panic = 1
 vm.dirty_ratio = 20
 
 # Strictly limits memory allocation to physical RAM + swap, preventing overcommit and reducing OOM risks.
-vm.overcommit_memory = 2
+vm.overcommit_memory = 0
 
 # Sets overcommit to 100% of RAM when enabled, but ignored here since overcommit_memory = 2 disables it.
 vm.overcommit_ratio = 100
