@@ -519,6 +519,8 @@ vm.overcommit_memory = 0
 vm.overcommit_ratio = 100
 net.ipv4.ip_local_port_range = 1024 65535
 net.ipv4.tcp_tw_reuse = 1
+net.netfilter.nf_conntrack_max=1048576
+net.netfilter.nf_conntrack_buckets=262144
 ################################################################
 ################################################################
 
