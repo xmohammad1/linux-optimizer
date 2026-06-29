@@ -434,7 +434,7 @@ net.ipv4.tcp_slow_start_after_idle = 0
 
 # Enable TCP window scaling
 net.ipv4.tcp_window_scaling = 1
-net.ipv4.tcp_adv_win_scale = -2
+net.ipv4.tcp_adv_win_scale = 0
 
 # Enable TCP ECN
 net.ipv4.tcp_ecn = 1
@@ -526,7 +526,16 @@ net.netfilter.nf_conntrack_buckets=262144
 
 
 EOF
-
+cat <<EOL > /etc/security/limits.conf
+* soft nproc 1048576
+* hard nproc 1048576
+* soft nofile 1048576
+* hard nofile 1048576
+root soft nproc 1048576
+root hard nproc 1048576
+root soft nofile 1048576
+root hard nofile 1048576
+EOL
     sudo sysctl -p
     
     echo 
