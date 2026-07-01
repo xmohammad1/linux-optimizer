@@ -361,7 +361,7 @@ fs.file-max = 67108864
 net.core.default_qdisc = fq
 
 # Configure maximum network device backlog
-net.core.netdev_max_backlog = 32768
+net.core.netdev_max_backlog = 65536
 
 # Set maximum socket receive buffer
 net.core.optmem_max = 262144
@@ -518,6 +518,7 @@ vm.overcommit_memory = 0
 # Sets overcommit to 100% of RAM when enabled, but ignored here since overcommit_memory = 2 disables it.
 vm.overcommit_ratio = 100
 net.ipv4.ip_local_port_range = 1024 65535
+net.core.rps_sock_flow_entries = 65536
 net.ipv4.tcp_tw_reuse = 1
 net.netfilter.nf_conntrack_max=1048576
 net.netfilter.nf_conntrack_buckets=262144
@@ -536,6 +537,30 @@ root hard nproc 1048576
 root soft nofile 1048576
 root hard nofile 1048576
 EOL
+mkdir -p /etc/docker
+cat <<EOF > /etc/docker/daemon.json
+{
+  "default-ulimits": {
+    "nofile": {
+      "Name": "nofile",
+      "Hard": 1048576,
+      "Soft": 1048576
+    },
+    "nproc": {
+      "Name": "nproc",
+      "Hard": 1048576,
+      "Soft": 1048576
+    }
+  }
+}
+EOF
+mkdir -p /etc/systemd/system/docker.service.d
+cat <<EOF > /etc/systemd/system/docker.service.d/override.conf
+[Service]
+LimitNOFILE=1048576
+LimitNPROC=1048576
+EOF
+    systemctl daemon-reload
     sudo sysctl -p
     
     echo 
