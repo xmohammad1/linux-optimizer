@@ -518,9 +518,6 @@ vm.overcommit_memory = 2
 # Sets overcommit to 100% of RAM when enabled, but ignored here since overcommit_memory = 2 disables it.
 vm.overcommit_ratio = 100
 
-net.ipv4.conf.default.rp_filter = 0
-net.ipv4.conf.all.rp_filter = 0
-
 net.ipv4.ip_local_port_range = 1024 65535
 net.netfilter.nf_conntrack_max = 1048576
 net.netfilter.nf_conntrack_buckets = 262144
