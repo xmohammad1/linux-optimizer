@@ -1,5 +1,5 @@
 #!/bin/bash
-# https://github.com/hawshemi/Linux-Optimizer
+# https://github.com/hawshemi/xmohammad1
 
 
 # Green, Yellow & Red Messages.
@@ -333,7 +333,7 @@ sysctl_optimizations() {
         "$SYS_PATH"
 
 
-    ## Add new parameters. Read More: https://github.com/hawshemi/Linux-Optimizer/blob/main/files/sysctl.conf
+    ## Add new parameters. Read More: https://github.com/hawshemi/xmohammad1/blob/main/files/sysctl.conf
 
 cat <<EOF >> "$SYS_PATH"
 
@@ -344,7 +344,7 @@ cat <<EOF >> "$SYS_PATH"
 
 # /etc/sysctl.conf
 # These parameters in this file will be added/updated to the sysctl.conf file.
-# Read More: https://github.com/hawshemi/Linux-Optimizer/blob/main/files/sysctl.conf
+# Read More: https://github.com/hawshemi/xmohammad1/blob/main/files/sysctl.conf
 
 
 ## File system settings
@@ -488,8 +488,8 @@ vm.vfs_cache_pressure = 250
 ## ----------------------------------------------------------------
 
 # Configure reverse path filtering
-net.ipv4.conf.default.rp_filter = 2
-net.ipv4.conf.all.rp_filter = 2
+net.ipv4.conf.default.rp_filter = 0
+net.ipv4.conf.all.rp_filter = 0
 
 # Disable source route acceptance
 net.ipv4.conf.all.accept_source_route = 0
@@ -518,7 +518,18 @@ vm.overcommit_memory = 2
 # Sets overcommit to 100% of RAM when enabled, but ignored here since overcommit_memory = 2 disables it.
 vm.overcommit_ratio = 100
 
+net.ipv4.conf.default.rp_filter = 0
+net.ipv4.conf.all.rp_filter = 0
 
+net.ipv4.ip_local_port_range = 1024 65535
+net.netfilter.nf_conntrack_max = 1048576
+net.netfilter.nf_conntrack_buckets = 262144
+net.netfilter.nf_conntrack_tcp_timeout_established = 600
+net.netfilter.nf_conntrack_tcp_timeout_time_wait = 30
+net.netfilter.nf_conntrack_tcp_timeout_close_wait = 15
+
+fs.inotify.max_user_instances = 8192
+fs.inotify.max_user_watches = 524288
 ################################################################
 ################################################################
 
