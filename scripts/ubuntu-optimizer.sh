@@ -513,7 +513,7 @@ kernel.panic = 1
 vm.dirty_ratio = 20
 
 # Strictly limits memory allocation to physical RAM + swap, preventing overcommit and reducing OOM risks.
-vm.overcommit_memory = 2
+vm.overcommit_memory = 1
 
 # Sets overcommit to 100% of RAM when enabled, but ignored here since overcommit_memory = 2 disables it.
 vm.overcommit_ratio = 100
@@ -521,7 +521,7 @@ vm.overcommit_ratio = 100
 net.ipv4.ip_local_port_range = 1024 65535
 net.netfilter.nf_conntrack_max = 1048576
 net.netfilter.nf_conntrack_buckets = 262144
-net.netfilter.nf_conntrack_tcp_timeout_established = 600
+net.netfilter.nf_conntrack_tcp_timeout_established = 14400
 net.netfilter.nf_conntrack_tcp_timeout_time_wait = 30
 net.netfilter.nf_conntrack_tcp_timeout_close_wait = 15
 
