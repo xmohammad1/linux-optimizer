@@ -437,8 +437,8 @@ net.ipv4.tcp_window_scaling = 1
 net.ipv4.tcp_adv_win_scale = -2
 
 # Enable TCP ECN
-net.ipv4.tcp_ecn = 0
-# net.ipv4.tcp_ecn_fallback = 1
+net.ipv4.tcp_ecn = 1
+net.ipv4.tcp_ecn_fallback = 1
 
 # Enable the use of TCP SYN cookies to help protect against SYN flood attacks
 net.ipv4.tcp_syncookies = 1
@@ -529,6 +529,7 @@ fs.inotify.max_user_instances = 8192
 fs.inotify.max_user_watches = 524288
 net.ipv4.tcp_timestamps = 1
 net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_fastopen = 3
 ################################################################
 ################################################################
 
