@@ -529,7 +529,7 @@ fs.inotify.max_user_instances = 8192
 fs.inotify.max_user_watches = 524288
 net.ipv4.tcp_timestamps = 1
 net.ipv4.tcp_tw_reuse = 1
-net.ipv4.tcp_fastopen = 3
+net.ipv4.tcp_fastopen = 1
 ################################################################
 ################################################################
 
