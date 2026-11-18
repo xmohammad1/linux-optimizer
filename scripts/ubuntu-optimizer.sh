@@ -329,6 +329,15 @@ sysctl_optimizations() {
         -e '/vm.dirty_ratio/d' \
         -e '/vm.overcommit_memory/d' \
         -e '/vm.overcommit_ratio/d' \
+        -e '/net.ipv4.ip_local_port_range/d' \
+        -e '/net.ipv4.ip_local_reserved_ports/d' \
+        -e '/nf_conntrack/d' \
+        -e '/fs.inotify.max_user/d' \
+        -e '/net.ipv4.tcp_timestamps/d' \
+        -e '/net.ipv4.tcp_tw_reuse/d' \
+        -e '/net.ipv4.tcp_mtu_probe_floor/d' \
+        -e '/net.core.netdev_budget/d' \
+        -e '/net.ipv4.tcp_no_metrics_save/d' \
         -e '/^#/d' \
         -e '/^$/d' \
         "$SYS_PATH"
