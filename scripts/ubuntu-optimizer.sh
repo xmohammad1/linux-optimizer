@@ -29,7 +29,7 @@ SSH_PORT=""
 SSH_PATH="/etc/ssh/sshd_config"
 SWAP_PATH="/swapfile"
 SWAP_SIZE=2G
-
+MODULES_CT_PATH="/etc/modules-load.d/optimizer-conntrack.conf"
 
 # Root
 check_if_running_as_root() {
@@ -262,7 +262,8 @@ swap_maker() {
 sysctl_optimizations() {
     ## Make a backup of the original sysctl.conf file
     cp $SYS_PATH /etc/sysctl.conf.bak
-
+    modprobe nf_conntrack 2>/dev/null
+    echo nf_conntrack > "$MODULES_CT_PATH"
     echo 
     yellow_msg 'Default sysctl.conf file Saved. Directory: /etc/sysctl.conf.bak'
     echo 
@@ -518,12 +519,14 @@ vm.overcommit_memory = 1
 # Sets overcommit to 100% of RAM when enabled, but ignored here since overcommit_memory = 2 disables it.
 vm.overcommit_ratio = 100
 
-net.ipv4.ip_local_port_range = 1024 65535
+net.ipv4.ip_local_port_range = 10000 65535
+net.ipv4.ip_local_reserved_ports = 80,443,2052,2053,2082,2083,2086,2087,2095,2096,3131,3350,8080,8443,8880,42538,42542,62050,62051
 net.netfilter.nf_conntrack_max = 1048576
 net.netfilter.nf_conntrack_buckets = 262144
 net.netfilter.nf_conntrack_tcp_timeout_established = 14400
+net.netfilter.nf_conntrack_tcp_timeout_syn_sent = 30
 net.netfilter.nf_conntrack_tcp_timeout_time_wait = 30
-net.netfilter.nf_conntrack_tcp_timeout_close_wait = 15
+net.netfilter.nf_conntrack_tcp_timeout_close_wait = 60
 net.ipv4.ip_local_port_range = 1024 65535
 fs.inotify.max_user_instances = 8192
 fs.inotify.max_user_watches = 524288
