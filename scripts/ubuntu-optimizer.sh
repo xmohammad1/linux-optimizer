@@ -536,7 +536,6 @@ net.netfilter.nf_conntrack_tcp_timeout_established = 14400
 net.netfilter.nf_conntrack_tcp_timeout_syn_sent = 30
 net.netfilter.nf_conntrack_tcp_timeout_time_wait = 30
 net.netfilter.nf_conntrack_tcp_timeout_close_wait = 60
-net.ipv4.ip_local_port_range = 1024 65535
 fs.inotify.max_user_instances = 8192
 fs.inotify.max_user_watches = 524288
 net.ipv4.tcp_timestamps = 1
@@ -731,7 +730,39 @@ limits_optimizations() {
     echo 
     sleep 0.5
 }
+# Systemd Limits Optimizations
+systemd_limits_optimizations() {
+    echo
+    yellow_msg 'Optimizing Systemd Limits...'
+    echo
+    sleep 0.5
 
+    mkdir -p /etc/systemd/system.conf.d /etc/systemd/user.conf.d
+
+    cat <<EOF > /etc/systemd/system.conf.d/99-optimizer.conf
+[Manager]
+DefaultLimitNOFILE=1048576:1048576
+DefaultLimitNPROC=1048576:1048576
+DefaultLimitMEMLOCK=infinity
+DefaultLimitCORE=0
+DefaultTasksMax=infinity
+EOF
+
+    cat <<EOF > /etc/systemd/user.conf.d/99-optimizer.conf
+[Manager]
+DefaultLimitNOFILE=1048576:1048576
+DefaultLimitNPROC=1048576:1048576
+DefaultLimitMEMLOCK=infinity
+DefaultLimitCORE=0
+EOF
+
+    systemctl daemon-reexec
+
+    echo
+    green_msg 'Systemd Limits are Optimized.'
+    echo
+    sleep 0.5
+}
 
 # UFW Optimizations
 ufw_optimizations() {
@@ -912,6 +943,7 @@ main() {
             sleep 0.5
 
             limits_optimizations
+            systemd_limits_optimizations
             sleep 0.5
 
             echo 
