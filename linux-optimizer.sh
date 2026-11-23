@@ -138,48 +138,40 @@ fix_dns(){
 
 
 # Set the server TimeZone to the VPS IP address location.
+# Set TimeZone based on VPS IP address
 set_timezone() {
     echo
     yellow_msg 'Setting TimeZone based on VPS IP address...'
+    echo
     sleep 0.5
 
-    get_location_info() {
-        local ip_sources=("https://ipv4.icanhazip.com" "https://api.ipify.org" "https://ipv4.ident.me/")
-        local location_info
+    local timezone=""
+    local tz=""
+    local fallback_tz="Asia/Tehran" # اگر برای سرورهای خارج هم استفاده می‌کنی می‌تونی UTC بذاری
+    local endpoints=(
+        "http://ip-api.com/line/?fields=timezone"
+        "https://ipinfo.io/timezone"
+        "https://ipapi.co/timezone"
+    )
 
-        for source in "${ip_sources[@]}"; do
-            local ip=$(curl -s "$source")
-            if [ -n "$ip" ]; then
-                location_info=$(curl -s "http://ip-api.com/json/$ip")
-                if [ -n "$location_info" ]; then
-                    echo "$location_info"
-                    return 0
-                fi
-            fi
-        done
+    for url in "${endpoints[@]}"; do
+        tz=$(curl -4 -fsSL --connect-timeout 3 --max-time 5 "$url" 2>/dev/null | tr -d '\r\n[:space:]')
 
-        red_msg "Error: Failed to fetch location information from known sources. Setting timezone to UTC."
-        sudo timedatectl set-timezone "UTC"
-        return 1
-    }
+        if [[ "$tz" =~ ^[A-Za-z0-9_+-]+(/[A-Za-z0-9_+-]+)*$ && -f "/usr/share/zoneinfo/$tz" ]]; then
+            timezone="$tz"
+            break
+        fi
+    done
 
-    # Fetch location information from three sources
-    location_info_1=$(get_location_info)
-    location_info_2=$(get_location_info)
-    location_info_3=$(get_location_info)
-
-    # Extract timezones from the location information
-    timezones=($(echo "$location_info_1 $location_info_2 $location_info_3" | jq -r '.timezone'))
-
-    # Check if at least two timezones are equal
-    if [[ "${timezones[0]}" == "${timezones[1]}" || "${timezones[0]}" == "${timezones[2]}" || "${timezones[1]}" == "${timezones[2]}" ]]; then
-        # Set the timezone based on the first matching pair
-        timezone="${timezones[0]}"
-        sudo timedatectl set-timezone "$timezone"
-        green_msg "Timezone set to $timezone"
+    if [[ -n "$timezone" ]]; then
+        timedatectl set-timezone "$timezone"
+        echo
+        green_msg "TimeZone set to: $timezone"
     else
-        red_msg "Error: Failed to fetch consistent location information from known sources. Setting timezone to UTC."
-        sudo timedatectl set-timezone "UTC"
+        echo
+        yellow_msg "GeoIP lookup failed or timed out. Falling back to $fallback_tz..."
+        timedatectl set-timezone "$fallback_tz"
+        green_msg "TimeZone set to fallback: $fallback_tz"
     fi
 
     echo
